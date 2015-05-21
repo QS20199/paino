@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+    <meta charset="UTF-8">
+    <title>五线谱记忆小工具</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no">
+    <style>
+        body{
+            margin: 1px;
+        }
+        .container{
+            max-width: 320px;
+            width: 100%;
+            border:1px solid gray;
+            position: absolute;
+            top:0;
+            bottom: 0;
+        }
+        #showArea{
+            position: relative;
+        }
+        #stave{
+            max-width: 60%;
+            width: auto;
+            margin: 0 20%;
+        }
+        #note{
+            width:4.4%;
+            position: absolute;
+            left:58%;
+            -webkit-transition:0.2s;
+        }
+        #paino{
+            position: absolute;
+            border: 1px solid gray;
+            top: 60%;
+            bottom: 0;
+            background-color: #EEE;
+            width:100%;
+            overflow: hidden;
+        }
+        .keyDown{
+            width:13.16%;
+            background-color: #fff;
+            border-radius: 5px;
+            border: 1px solid black;
+            position: absolute;
+            bottom:0;
+            height:300px;
+            text-align: center;
+
+        }
+        .keyUp{
+            width:10%;
+            background-color: #000;
+            border-radius: 5px;
+            position: absolute;
+            bottom: 40%;
+            height: 300px;
+        }
+        .keyC{
+            left:0;
+        }
+        .keyD{
+            left:14%;
+        }
+        .keyE{
+            left:28%;
+        }
+        .keyF{
+            left:42%;
+        }
+        .keyG{
+            left:56%;
+        }
+        .keyA{
+            left:70%;
+        }
+        .keyB{
+            left:84%;
+        }
+
+        .keyUpC{
+            left:9%;
+        }
+        .keyUpD{
+            left:22.8%;
+        }
+        .keyUpF{
+            left:50.5%;
+        }
+        .keyUpG{
+            left:64.7%;
+        }
+        .keyUpA{
+            left:79%;
+        }
+        .keyDownName{
+            position: absolute;
+            bottom:0;
+            left:45%;
+        }
+
+        .Up3D{top:   7%  }
+        .Up3C{top:   9.083%  }
+        .Up3B{top:   11.166%  }
+        .Up3A{top:   13.249%  }
+        .Up2G{top:   15.333%  }
+        .Up2F{top:   17.417%  }
+        .Up2E{top:   19.5%  }
+        .Up2D{top:   21.583%  }
+        .Up2C{top:   23.667%  }
+        .Up2B{top:   25.75%  }
+        .Up2A{top:   27.833%  }
+        .Up1G{top:   29.917%  }
+        .Up1F{top:   32%  }
+        .Up1E{top:   34.083%  }
+        .Up1D{top:   36.167%  }
+        .Up1C{top:   38.25%  }
+        .Up1B{top:   40.333%  }
+        .Up1A{top:   42.417%  }
+        .Up0G{top:   44.5%  }
+
+        .Down3F{top:   48.7%  }
+        .Down3E{top:   50.793%  }
+        .Down3D{top:   52.887%  }
+        .Down3C{top:   54.98%  }
+        .Down3B{top:   57.073%  }
+        .Down3A{top:   59.166%  }
+        .Down2G{top:   61.259%  }
+        .Down2F{top:   63.353%  }
+        .Down2E{top:   65.447%  }
+        .Down2D{top:   67.54%  }
+        .Down2C{top:   69.633%  }
+        .Down2B{top:   71.727%  }
+        .Down2A{top:   73.82%  }
+        .Down1G{top:   75.913%  }
+        .Down1F{top:   78.007%  }
+        .Down1E{top:   80.1%  }
+        .Down1D{top:   82.193%  }
+        .Down1C{top:   84.286%  }
+        .Down1B{top:   86.38%  }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="toolbalr">
+            <button id="changeMode">练习高音谱表</button>
+            <button id="changeShow">切换音符显示</button>
+        </div>
+        <div id="showArea">
+            <img id="stave" src="stave.jpg" alt="stave"/>
+            <img id="note" src="note.png" alt="note" class="Up2B"/>
+        </div>
+        <div id="paino">
+            <div id="normal">
+                <div class="keyDown keyC"><span class="keyDownName">C</span></div>
+                <div class="keyDown keyD"><span class="keyDownName">D</span></div>
+                <div class="keyDown keyE"><span class="keyDownName">E</span></div>
+                <div class="keyDown keyF"><span class="keyDownName">F</span></div>
+                <div class="keyDown keyG"><span class="keyDownName">G</span></div>
+                <div class="keyDown keyA"><span class="keyDownName">A</span></div>
+                <div class="keyDown keyB"><span class="keyDownName">B</span></div>
+            </div>
+            <div id="higher">
+                <div class="keyUp keyUpC"><span class="keyUpName"></span></div>
+                <div class="keyUp keyUpD"><span class="keyUpName"></span></div>
+                <div class="keyUp keyUpF"><span class="keyUpName"></span></div>
+                <div class="keyUp keyUpG"><span class="keyUpName"></span></div>
+                <div class="keyUp keyUpA"><span class="keyUpName"></span></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var notesUp = ["Up3D","Up3C","Up3B","Up3A","Up2G","Up2F","Up2E","Up2D","Up2C","Up2B","Up2A","Up1G","Up1F","Up1E","Up1D","Up1C","Up1B","Up1A","Up0G"];
+    var notesDown = ["Down3F","Down3E","Down3D","Down3C","Down3B","Down3A","Down2G","Down2F","Down2E","Down2D","Down2C","Down2B","Down2A","Down1G","Down1F","Down1E","Down1D","Down1C","Down1B"];
+    var changeShow = document.getElementById("changeShow");
+    var changeMode = document.getElementById("changeMode");
+    var note = document.getElementById("note");
+    var keyNames = document.querySelectorAll(".keyDownName");
+    var painoDown = document.getElementById("normal");
+    var show = true;
+    var mode = "up";
+
+
+    changeShow.addEventListener("click", function () {
+        if(show===true){
+            for(var i=keyNames.length-1;i>=0;i--){
+                keyNames[i].style.display="none";
+            }
+            show=false;
+        }else{
+            for(var i=keyNames.length-1;i>=0;i--){
+                keyNames[i].style.display="";
+            }
+            show=true;
+        }
+
+    })
+
+    changeMode.addEventListener("click", function () {
+        if(mode==="up"){
+            mode="down";
+            this.innerHTML="练习低音谱表";
+            note.className="Down2D";
+        }else if(mode==="down"){
+            mode="all";
+            this.innerHTML="练习双音谱表";
+        }else{
+            mode="up";
+            this.innerHTML="练习高音谱表";
+            note.className="Up2B";
+        }
+    })
+
+    painoDown.addEventListener("click", function (event) {
+        var target = event.target;
+        if(target.nodeName==="SPAN"){
+            target = target.parentNode;
+        }
+        if(target.className.slice(-1)===note.className.slice(-1)){
+            //right
+            var seed = Math.floor((Math.random()*19));
+            if(mode=="up"){
+                note.className=notesUp[seed];
+            }else if(mode=="down"){
+                note.className=notesDown[seed];
+            }else{
+                if(Math.random()>0.5){
+                    note.className=notesUp[seed];
+                }else{
+                    note.className=notesDown[seed];
+                }
+            }
+        }else{
+            //wrong
+        }
+    })
+
+</script>
+</html>
