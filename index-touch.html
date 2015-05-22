@@ -38,12 +38,17 @@
             width: 120px;
             height:35px;
             line-height: 35px;
-            border-radius: 5px;
             border:1px solid #bfbfbf;
+            border-radius: 5px;
             color: #646464;
             background-color: #fff;
-            margin: 10px 10px;
+            margin: 10px 5px;
             display: inline-block;
+        }
+
+        #range {
+            width:30px;
+            border:1px solid #bfbfbf;
         }
 
         #tips{
@@ -220,6 +225,7 @@
         <div id="toolbalr">
             <button id="changeMode">切换为仅低音谱表</button>
             <button id="changeShow">切换音符显示</button>
+            <input type="text" id="range"/>
         </div>
         <div id="tips" class="hidden">
             <img src="https://raw.githubusercontent.com/QS20199/paino/master/right.gif" id="right"/>
@@ -264,11 +270,17 @@
     var wrong = document.getElementById("wrong");
     var tips = document.getElementById("tips");
     var answer = document.getElementById("answer");
-    changeShow.addEventListener("touchstart", function () {
+    var range = document.getElementById("range");
+
+
+    var fun1 = function (event) {
         event.preventDefault();
         this.style.backgroundColor="#EAEAEA";
-    });
-    changeShow.addEventListener("touchend", function (event) {
+    };
+    changeShow.addEventListener("touchstart", fun1);
+    changeShow.addEventListener("mousedown", fun1);
+
+    var fun2 = function (event) {
         event.preventDefault();
         this.style.backgroundColor="#FFF";
         if(show===true){
@@ -282,13 +294,21 @@
             }
             show=true;
         }
-    })
+    };
+    changeShow.addEventListener("touchend", fun2);
+    changeShow.addEventListener("mouseup", fun2);
 
-    changeMode.addEventListener("touchstart", function () {
+
+
+    var fun3 =  function (event) {
         event.preventDefault();
         this.style.backgroundColor="#EAEAEA";
-    })
-    changeMode.addEventListener("touchend",function(event){
+    };
+    changeMode.addEventListener("touchstart",fun3);
+    changeMode.addEventListener("mousedown",fun3);
+
+
+    var fun4 = function(event){
         event.preventDefault();
         this.style.backgroundColor="#FFF";
         if(mode==="up"){
@@ -303,10 +323,12 @@
             this.innerHTML="切换为仅低音谱表";
             note.className="Up2B";
         }
-    })
+    };
+    changeMode.addEventListener("touchend", fun4);
+    changeMode.addEventListener("mouseup", fun4);
 
 
-    painoDown.addEventListener("touchstart", function (event) {
+    var fun5 = function (event) {
         event.preventDefault();
         var target = event.target;
         if(target.nodeName==="SPAN"){
@@ -317,8 +339,12 @@
         }else{
             target.className+=" pressDown";
         }
-    })
-    painoDown.addEventListener("touchend", function (event) {
+    };
+    painoDown.addEventListener("touchstart", fun5);
+    painoDown.addEventListener("mousedown", fun5);
+
+
+    var fun6 = function (event) {
         event.preventDefault();
         var target = event.target;
         var key = note.className.slice(-1);
@@ -328,7 +354,11 @@
         target.className=target.className.replace("pressDown","pressUp");
         if(target.className.split(/[^^]key/)[1][0]===note.className.slice(-1)){
             //right
-            var seed = Math.floor((Math.random()*19));
+            var shangxian = Number(range.value.split(',')[1] || 17);
+            var xiaxian = Number(range.value.split(',')[0] || 0);
+            console.log(shangxian);
+            console.log(xiaxian);
+            var seed = xiaxian+ Math.floor((Math.random()*(shangxian-xiaxian)));
             if(mode=="up"){
                 note.className=notesUp[seed];
             }else if(mode=="down"){
@@ -358,7 +388,10 @@
                 tips.className="easeout";
             },30);
         }
-    })
+    };
+    painoDown.addEventListener("touchend", fun6);
+    painoDown.addEventListener("mouseup", fun6);
+
 
 </script>
 </html>
