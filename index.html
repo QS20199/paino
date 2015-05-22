@@ -5,16 +5,74 @@
     <title>五线谱记忆小工具</title>
     <meta name="viewport" content="width=device-width,user-scalable=no">
     <style>
+
         body{
-            margin: 1px;
+            margin: 0;
+            font-family: "Helvetica","Microsoft YaHei";
+            font-size: 15px;
+            -webkit-user-select:none;
         }
+
+        @media all and (min-width:400px) {
+            .container{
+                left:50%;
+                margin-left:-200px;
+            }
+        }
+
         .container{
-            max-width: 320px;
+            max-width: 400px;
+            max-height: 600px;
             width: 100%;
-            border:1px solid gray;
             position: absolute;
             top:0;
             bottom: 0;
+            text-align: center;
+        }
+
+        #toolbox{
+            text-align: center;
+            margin: 0 auto;
+        }
+        button{
+            width: 120px;
+            height:35px;
+            line-height: 35px;
+            border-radius: 5px;
+            border:1px solid #bfbfbf;
+            color: #646464;
+            background-color: #fff;
+            margin: 10px 10px;
+            display: inline-block;
+        }
+
+        #tips{
+            position: relative;
+            width:100%;
+            height:30px;
+            /*margin: 20%;*/
+        }
+        #right,#wrong{
+            position: absolute;
+            width:15px;
+            top:10px;
+            left:40%;
+        }
+        .hidden{
+            opacity: 0;
+        }
+        .easeout{
+            -webkit-animation:easeout 1.5s;
+            -webkit-animation-fill-mode:forwards;
+        }
+        @-webkit-keyframes easeout{
+            0% {opacity: 1;}
+            100% {opacity: 0;}
+        }
+        #answer{
+            position: absolute;
+            left:60%;
+            top:9px;
         }
         #showArea{
             position: relative;
@@ -22,7 +80,7 @@
         #stave{
             max-width: 60%;
             width: auto;
-            margin: 0 20%;
+            margin: 0 20% 0;
         }
         #note{
             width:4.4%;
@@ -32,10 +90,9 @@
         }
         #paino{
             position: absolute;
-            border: 1px solid gray;
-            top: 60%;
+            border-top: 1px solid gray;
+            top: 70%;
             bottom: 0;
-            background-color: #EEE;
             width:100%;
             overflow: hidden;
         }
@@ -55,7 +112,7 @@
             background-color: #000;
             border-radius: 5px;
             position: absolute;
-            bottom: 40%;
+            bottom: 45%;
             height: 300px;
         }
         .keyC{
@@ -78,6 +135,8 @@
         }
         .keyB{
             left:84%;
+            right:0;
+            width:auto;
         }
 
         .keyUpC{
@@ -98,7 +157,7 @@
         .keyDownName{
             position: absolute;
             bottom:0;
-            left:45%;
+            left:40%;
         }
 
         .Up3D{top:   7%  }
@@ -141,13 +200,31 @@
         .Down1C{top:   84.286%  }
         .Down1B{top:   86.38%  }
 
+        .pressDown{
+            background-color: #bababa;
+        }
+        .pressUp{
+            -webkit-animation: color 0.3s;
+            -webkit-animation-fill-mode:forwards;
+        }
+
+        @-webkit-keyframes color{
+            0% {background-color: #bababa;}
+            100% {background-color: #ffffff;}
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
         <div id="toolbalr">
-            <button id="changeMode">练习高音谱表</button>
+            <button id="changeMode">切换为仅低音谱表</button>
             <button id="changeShow">切换音符显示</button>
+        </div>
+        <div id="tips" class="hidden">
+            <img src="right.gif" id="right"/>
+            <img src="wrong.gif" id="wrong"/>
+            <span id="answer">C</span>
         </div>
         <div id="showArea">
             <img id="stave" src="stave.jpg" alt="stave"/>
@@ -183,9 +260,17 @@
     var painoDown = document.getElementById("normal");
     var show = true;
     var mode = "up";
-
-
-    changeShow.addEventListener("click", function () {
+    var right = document.getElementById("right");
+    var wrong = document.getElementById("wrong");
+    var tips = document.getElementById("tips");
+    var answer = document.getElementById("answer");
+    changeShow.addEventListener("touchstart", function () {
+        event.preventDefault();
+        this.style.backgroundColor="#EAEAEA";
+    });
+    changeShow.addEventListener("touchend", function (event) {
+        event.preventDefault();
+        this.style.backgroundColor="#FFF";
         if(show===true){
             for(var i=keyNames.length-1;i>=0;i--){
                 keyNames[i].style.display="none";
@@ -197,30 +282,51 @@
             }
             show=true;
         }
-
     })
 
-    changeMode.addEventListener("click", function () {
+    changeMode.addEventListener("touchstart", function () {
+        event.preventDefault();
+        this.style.backgroundColor="#EAEAEA";
+    })
+    changeMode.addEventListener("touchend",function(event){
+        event.preventDefault();
+        this.style.backgroundColor="#FFF";
         if(mode==="up"){
             mode="down";
-            this.innerHTML="练习低音谱表";
+            this.innerHTML="切换为双音谱表";
             note.className="Down2D";
         }else if(mode==="down"){
             mode="all";
-            this.innerHTML="练习双音谱表";
+            this.innerHTML="切换为仅高音谱表";
         }else{
             mode="up";
-            this.innerHTML="练习高音谱表";
+            this.innerHTML="切换为仅低音谱表";
             note.className="Up2B";
         }
     })
 
-    painoDown.addEventListener("click", function (event) {
+
+    painoDown.addEventListener("touchstart", function (event) {
+        event.preventDefault();
         var target = event.target;
         if(target.nodeName==="SPAN"){
             target = target.parentNode;
         }
-        if(target.className.slice(-1)===note.className.slice(-1)){
+        if(target.className.search("pressUp")!==-1){
+            target.className=target.className.replace("pressUp","pressDown");
+        }else{
+            target.className+=" pressDown";
+        }
+    })
+    painoDown.addEventListener("touchend", function (event) {
+        event.preventDefault();
+        var target = event.target;
+        var key = note.className.slice(-1);
+        if(target.nodeName==="SPAN"){
+            target = target.parentNode;
+        }
+        target.className=target.className.replace("pressDown","pressUp");
+        if(target.className.split(/[^^]key/)[1][0]===note.className.slice(-1)){
             //right
             var seed = Math.floor((Math.random()*19));
             if(mode=="up"){
@@ -234,8 +340,23 @@
                     note.className=notesDown[seed];
                 }
             }
+
+            wrong.style.display="none";
+            right.style.display="";
+            tips.className="";
+            answer.innerHTML=key;
+            setTimeout(function(){
+                tips.className="easeout";
+            },300);
         }else{
             //wrong
+            wrong.style.display="";
+            right.style.display="none";
+            tips.className="";
+            answer.innerHTML=key;
+            setTimeout(function(){
+                tips.className="easeout";
+            },30);
         }
     })
 
