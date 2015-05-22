@@ -22,11 +22,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index-touch.html" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/index-touch.html">
+      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.5344262" vertical-offset="8646" max-vertical-offset="10452">
-              <caret line="392" column="48" selection-start-line="392" selection-start-column="48" selection-end-line="392" selection-end-column="48" />
+            <state vertical-scroll-proportion="7.6065574" vertical-offset="4278" max-vertical-offset="10452">
+              <caret line="343" column="35" selection-start-line="343" selection-start-column="35" selection-end-line="343" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -207,10 +207,10 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/index-touch.html">
+    <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.5344262" vertical-offset="8646" max-vertical-offset="10452">
-          <caret line="392" column="48" selection-start-line="392" selection-start-column="48" selection-end-line="392" selection-end-column="48" />
+        <state vertical-scroll-proportion="7.6065574" vertical-offset="4278" max-vertical-offset="10452">
+          <caret line="343" column="35" selection-start-line="343" selection-start-column="35" selection-end-line="343" selection-end-column="35" />
           <folding />
         </state>
       </provider>
