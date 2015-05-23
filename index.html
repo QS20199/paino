@@ -37,7 +37,6 @@
         }
         button{
             width: 120px;
-            height:35px;
             line-height: 35px;
             border:1px solid #bfbfbf;
             border-radius: 5px;
@@ -355,8 +354,8 @@
         target.className=target.className.replace("pressDown","pressUp");
         if(target.className.split(/[^^]key/)[1][0]===note.className.slice(-1)){
             //right
-            var shangxian = Number(range.value.split(',')[1] || 19);
-            var xiaxian = Number(range.value.split(',')[0] || 0);
+            var shangxian = Number(range.value.split(/\D/)[1] || 19);
+            var xiaxian = Number(range.value.split(/\D/)[0] || 0);
             var seed = Math.floor (xiaxian+(Math.random()*(shangxian-xiaxian)));
             if(mode=="up"){
                 note.className=notesUp[seed];
@@ -376,7 +375,7 @@
             answer.innerHTML=key;
             setTimeout(function(){
                 tips.className="easeout";
-            },300);
+            },10);
         }else{
             //wrong
             wrong.style.display="";
@@ -385,7 +384,7 @@
             answer.innerHTML=key;
             setTimeout(function(){
                 tips.className="easeout";
-            },30);
+            },10);
         }
     };
     painoDown.addEventListener("touchend", fun6);
